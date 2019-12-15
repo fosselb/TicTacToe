@@ -1,9 +1,6 @@
 //Things to Add:
 // - question mark operators for simple if/else statement functions
 
-//making changes
-//MORE changes
-
 import java.util.Arrays;
 
 private final int innerBoxWidth = 650;
@@ -17,27 +14,54 @@ private final int[] point0 = {largeBoxMargin, largeBoxMargin};
 private final int[] point1 = {largeBoxMargin + innerBoxWidth/3, largeBoxMargin};
 private final int[] point2 = {largeBoxMargin + innerBoxWidth*2/3, largeBoxMargin};
 private final int[] point3 = {largeBoxMargin + innerBoxWidth, largeBoxMargin};
-
 private final int[] point4 = {largeBoxMargin, largeBoxMargin + innerBoxHeight/3};
 private final int[] point5 = {largeBoxMargin + innerBoxWidth/3, largeBoxMargin + innerBoxHeight/3};
 private final int[] point6 = {largeBoxMargin + innerBoxWidth*2/3, largeBoxMargin + innerBoxHeight/3};
 private final int[] point7 = {largeBoxMargin + innerBoxWidth, largeBoxMargin + innerBoxHeight/3};
-
 private final int[] point8 = {largeBoxMargin, largeBoxMargin + innerBoxHeight*2/3};
 private final int[] point9 = {largeBoxMargin + innerBoxWidth/3, largeBoxMargin + innerBoxHeight*2/3};
 private final int[] point10 = {largeBoxMargin + innerBoxWidth*2/3, largeBoxMargin + innerBoxHeight*2/3};
 private final int[] point11 = {largeBoxMargin + innerBoxWidth, largeBoxMargin + innerBoxHeight*2/3};
-
 private final int[] point12 = {largeBoxMargin, largeBoxMargin + innerBoxHeight};
 private final int[] point13 = {largeBoxMargin + innerBoxWidth/3, largeBoxMargin + innerBoxHeight};
 private final int[] point14 = {largeBoxMargin + innerBoxWidth*2/3, largeBoxMargin + innerBoxHeight};
-private final int[] point15 = {largeBoxMargin + innerBoxWidth, largeBoxMargin + innerBoxHeight};
+//private final int[] point15 = {largeBoxMargin + innerBoxWidth, largeBoxMargin + innerBoxHeight};
+
+private int gameState = 0;
+private String winningPlayer = "";
 
 
 public void setup() {
   size(750, 750);
-  background(0);
+  drawGameBoard();
+  
+  //background(0);
+  //stroke(255);
+  ////Outline of game board
+  //line(largeBoxMargin + innerBoxWidth/3, largeBoxMargin, largeBoxMargin + innerBoxWidth/3, largeBoxMargin + lineLength);
+  //line(largeBoxMargin + innerBoxWidth*2/3, largeBoxMargin, largeBoxMargin + innerBoxWidth*2/3, largeBoxMargin + lineLength);
+  //line(largeBoxMargin, largeBoxMargin + innerBoxHeight/3, largeBoxMargin + lineLength, largeBoxMargin + innerBoxHeight/3);
+  //line(largeBoxMargin, largeBoxMargin + innerBoxHeight*2/3, largeBoxMargin + lineLength, largeBoxMargin + innerBoxHeight*2/3);
+}
+
+public void draw() {
+  if (gameState == 0) {
+    initScreen();
+  } else if (gameState == 1) {
+    player0Screen();
+  } else if (gameState == 2) {
+    player1Screen();
+  } else if (gameState == 3) {
+    gameOverScreen();
+  }   
+}
+
+//Game State methods
+
+public void drawGameBoard() {
+  background(60);
   stroke(255);
+  strokeWeight(4);
   //Outline of game board
   line(largeBoxMargin + innerBoxWidth/3, largeBoxMargin, largeBoxMargin + innerBoxWidth/3, largeBoxMargin + lineLength);
   line(largeBoxMargin + innerBoxWidth*2/3, largeBoxMargin, largeBoxMargin + innerBoxWidth*2/3, largeBoxMargin + lineLength);
@@ -45,37 +69,107 @@ public void setup() {
   line(largeBoxMargin, largeBoxMargin + innerBoxHeight*2/3, largeBoxMargin + lineLength, largeBoxMargin + innerBoxHeight*2/3);
 }
 
-public void draw() {
-  //drawAtPosition(1, 0);
-  //drawAtPosition(1, 1);
-  //drawAtPosition(1, 2);
-  //drawAtPosition(1, 3);
-  //drawAtPosition(1, 4);
-  //drawAtPosition(1, 5);
-  //drawAtPosition(1, 6);
-  //drawAtPosition(1, 7);
-  //drawAtPosition(1, 8);
-  //drawAtPosition(0, 8);
-  
-  //drawAtPosition(0, 1);
-  //drawAtPosition(0, 2);
-  //drawAtPosition(1, 8);
-  //drawAtPosition(1, 4);
-  //drawAtPosition(0, 4);
-  
-  //System.out.println(Arrays.toString(playerMoves));
-  //System.out.println("-----------");
+public void initScreen() {
+  textSize(40);
+  fill(219, 43, 31);
+  textAlign(CENTER);
+  text("TIC-TAC-TOE", width/2, largeBoxMargin - 10); 
+  text("Click anywhere to begin", width/2, largeBoxMargin*2 + innerBoxHeight - 10); 
 }
 
-//methods
-
-public void mouseClicked() {
-  if (validClick(mouseX, mouseY)) {
-    drawAtPosition(0, positionToDraw(mouseX, mouseY));
-  } else { 
-    //do nothing
+public void player0Screen() {
+  eraseBeginInstruction();
+  if (isBoardFull() || threeInARow() != "") {
+    winningPlayer = threeInARow();
+    gameState = 3;
   }
 }
+
+public void player1Screen() {
+  eraseBeginInstruction();
+  if (isBoardFull() || threeInARow() != "") {
+    winningPlayer = threeInARow();
+    gameState = 3;
+  }
+}
+
+public void gameOverScreen() {
+  textSize(40);
+  fill(255, 0, 0);
+  textAlign(CENTER);
+  if (winningPlayer == "X") {
+    text("X Wins!", width/2, largeBoxMargin*2 + innerBoxHeight - 10); 
+  } else if (winningPlayer == "O") {
+    text("O Wins!", width/2, largeBoxMargin*2 + innerBoxHeight - 10); 
+  } else {
+    text("Cats Game. Nobody Wins.", width/2, largeBoxMargin*2 + innerBoxHeight - 10); 
+  }
+}
+
+public void mouseClicked() {
+  //System.out.println("Game State: " + gameState);
+  if (gameState == 0) {
+    startGame();
+  } else if (gameState == 1) {
+    //System.out.println("Game State # 1 START");
+    if (validClick(mouseX, mouseY) && validMove(positionToDraw(mouseX, mouseY))) {
+      drawAtPosition(0, positionToDraw(mouseX, mouseY));
+      switchPlayer();
+    }
+  } else if (gameState == 2) {
+    //System.out.println("Game State # 2 START");
+    if (validClick(mouseX, mouseY) && validMove(positionToDraw(mouseX, mouseY))) {
+      drawAtPosition(1, positionToDraw(mouseX, mouseY));
+      switchPlayer();
+    }
+  } else if (gameState == 3) {
+    restart();
+  }
+  //System.out.println("------------");
+}
+
+public void eraseBeginInstruction() {
+  fill(60);
+  noStroke();
+  rect(largeBoxMargin, largeBoxMargin + innerBoxHeight, innerBoxWidth, largeBoxMargin);
+}
+
+//temp
+public boolean spaceBarPressed() {
+  if (keyPressed) {
+    if (key == ' ') {
+      return true;
+    } else {
+      return false;
+    }
+  } else {
+    return false;
+  }
+}
+
+public void startGame() {
+  gameState = 1;
+}
+
+public void restart() {
+  eraseBeginInstruction();
+  for (int i = 0; i < playerMoves.length; i++) {
+    playerMoves[i] = null;
+  }
+  drawGameBoard();
+  gameState = 0;
+}
+
+public void switchPlayer() {
+  if (gameState == 1) {
+    gameState = 2;
+  } else if (gameState == 2) {
+    gameState = 1;
+  }
+}
+
+
+//Other methods
 
 public boolean validClick(int x, int y) {
   if (x < largeBoxMargin || x > (largeBoxMargin + innerBoxWidth) || y < largeBoxMargin || y > (largeBoxMargin + innerBoxWidth)) {
@@ -109,7 +203,6 @@ public int positionToDraw(int x, int y) {
     return 10;
   }
 }
-
 
 public void drawX() {
   stroke(255); 
@@ -224,5 +317,40 @@ public void updatePlayerData(int player, int position) {
   }
 }
 
-public void threeInARow() {
+public String threeInARow() {
+  if (playerMoves[0] == "X" && playerMoves[1] == "X" && playerMoves[2] == "X") {
+    return "X";
+  } else if (playerMoves[3] == "X" && playerMoves[4] == "X" && playerMoves[5] == "X") {
+    return "X";
+  } else if (playerMoves[6] == "X" && playerMoves[7] == "X" && playerMoves[8] == "X") {
+    return "X";
+  } else if (playerMoves[0] == "X" && playerMoves[3] == "X" && playerMoves[6] == "X") {
+    return "X";
+  } else if (playerMoves[1] == "X" && playerMoves[4] == "X" && playerMoves[7] == "X") {
+    return "X";
+  } else if (playerMoves[2] == "X" && playerMoves[5] == "X" && playerMoves[8] == "X") {
+    return "X";
+  } else if (playerMoves[0] == "X" && playerMoves[4] == "X" && playerMoves[8] == "X") {
+    return "X";
+  } else if (playerMoves[2] == "X" && playerMoves[4] == "X" && playerMoves[6] == "X") {
+    return "X";
+  } else if (playerMoves[0] == "O" && playerMoves[1] == "O" && playerMoves[2] == "O") {
+    return "O";
+  } else if (playerMoves[3] == "O" && playerMoves[4] == "O" && playerMoves[5] == "O") {
+    return "O";
+  } else if (playerMoves[6] == "O" && playerMoves[7] == "O" && playerMoves[8] == "O") {
+    return "O";
+  } else if (playerMoves[0] == "O" && playerMoves[3] == "O" && playerMoves[6] == "O") {
+    return "O";
+  } else if (playerMoves[1] == "O" && playerMoves[4] == "O" && playerMoves[7] == "O") {
+    return "O";
+  } else if (playerMoves[2] == "O" && playerMoves[5] == "O" && playerMoves[8] == "O") {
+    return "O";
+  } else if (playerMoves[0] == "O" && playerMoves[4] == "O" && playerMoves[8] == "O") {
+    return "O";
+  } else if (playerMoves[0] == "O" && playerMoves[4] == "O" && playerMoves[8] == "O") {
+    return "O";
+  } else {
+    return "";
+  }
 }
