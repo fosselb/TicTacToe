@@ -7,8 +7,8 @@ private final int innerBoxWidth = 650;
 private final int innerBoxHeight = 650;
 private final int largeBoxMargin = 50;
 private final int lineLength = 650;
-private final int smallBoxMargin = 40;
-private final int circleDiameter = 175;
+private final int smallBoxMargin = 50;
+private final int circleDiameter = 140;
 private String[] playerMoves = new String[9]; //Players Data
 private final int[] point0 = {largeBoxMargin, largeBoxMargin};
 private final int[] point1 = {largeBoxMargin + innerBoxWidth/3, largeBoxMargin};
@@ -61,7 +61,7 @@ public void drawGameBoard() {
   //background(60);
   background(backgroundColor);
   stroke(gameBoardColor);
-  strokeWeight(4);
+  strokeWeight(10);
   //Outline of game board
   line(largeBoxMargin + innerBoxWidth/3, largeBoxMargin, largeBoxMargin + innerBoxWidth/3, largeBoxMargin + lineLength);
   line(largeBoxMargin + innerBoxWidth*2/3, largeBoxMargin, largeBoxMargin + innerBoxWidth*2/3, largeBoxMargin + lineLength);
@@ -132,7 +132,7 @@ public void mouseClicked() {
 public void eraseBeginInstruction() {
   fill(backgroundColor);
   noStroke();
-  rect(largeBoxMargin, largeBoxMargin + innerBoxHeight, innerBoxWidth, largeBoxMargin);
+  rect(largeBoxMargin, largeBoxMargin + innerBoxHeight + 5, innerBoxWidth, largeBoxMargin);
 }
 
 //temp
