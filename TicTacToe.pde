@@ -30,18 +30,17 @@ private final int[] point14 = {largeBoxMargin + innerBoxWidth*2/3, largeBoxMargi
 private int gameState = 0;
 private String winningPlayer = "";
 
+//private int backgroundColor = #658499;
+private int backgroundColor = #31909c;
+private int textColor = #3d319c;
+private int gameBoardColor = #FFFFFF;
+private int XColor = #9c3d31;
+private int OColor = #909c31;
+
 
 public void setup() {
   size(750, 750);
   drawGameBoard();
-  
-  //background(0);
-  //stroke(255);
-  ////Outline of game board
-  //line(largeBoxMargin + innerBoxWidth/3, largeBoxMargin, largeBoxMargin + innerBoxWidth/3, largeBoxMargin + lineLength);
-  //line(largeBoxMargin + innerBoxWidth*2/3, largeBoxMargin, largeBoxMargin + innerBoxWidth*2/3, largeBoxMargin + lineLength);
-  //line(largeBoxMargin, largeBoxMargin + innerBoxHeight/3, largeBoxMargin + lineLength, largeBoxMargin + innerBoxHeight/3);
-  //line(largeBoxMargin, largeBoxMargin + innerBoxHeight*2/3, largeBoxMargin + lineLength, largeBoxMargin + innerBoxHeight*2/3);
 }
 
 public void draw() {
@@ -59,8 +58,9 @@ public void draw() {
 //Game State methods
 
 public void drawGameBoard() {
-  background(60);
-  stroke(255);
+  //background(60);
+  background(backgroundColor);
+  stroke(gameBoardColor);
   strokeWeight(4);
   //Outline of game board
   line(largeBoxMargin + innerBoxWidth/3, largeBoxMargin, largeBoxMargin + innerBoxWidth/3, largeBoxMargin + lineLength);
@@ -71,7 +71,8 @@ public void drawGameBoard() {
 
 public void initScreen() {
   textSize(40);
-  fill(219, 43, 31);
+  //fill(219, 43, 31);
+  fill(textColor);
   textAlign(CENTER);
   text("TIC-TAC-TOE", width/2, largeBoxMargin - 10); 
   text("Click anywhere to begin", width/2, largeBoxMargin*2 + innerBoxHeight - 10); 
@@ -95,7 +96,7 @@ public void player1Screen() {
 
 public void gameOverScreen() {
   textSize(40);
-  fill(255, 0, 0);
+  fill(textColor);
   textAlign(CENTER);
   if (winningPlayer == "X") {
     text("X Wins!", width/2, largeBoxMargin*2 + innerBoxHeight - 10); 
@@ -129,7 +130,7 @@ public void mouseClicked() {
 }
 
 public void eraseBeginInstruction() {
-  fill(60);
+  fill(backgroundColor);
   noStroke();
   rect(largeBoxMargin, largeBoxMargin + innerBoxHeight, innerBoxWidth, largeBoxMargin);
 }
@@ -205,13 +206,13 @@ public int positionToDraw(int x, int y) {
 }
 
 public void drawX() {
-  stroke(255); 
+  stroke(XColor); 
   line(largeBoxMargin + smallBoxMargin, largeBoxMargin + smallBoxMargin, largeBoxMargin + innerBoxWidth/3 - smallBoxMargin, largeBoxMargin + innerBoxHeight/3 - smallBoxMargin);
   line(largeBoxMargin + innerBoxWidth/3 - smallBoxMargin, largeBoxMargin + smallBoxMargin, largeBoxMargin + smallBoxMargin, largeBoxMargin + innerBoxHeight/3 - smallBoxMargin);
 }
 
 public void drawO() {
-  stroke(255);
+  stroke(OColor);
   noFill();
   ellipse(largeBoxMargin + innerBoxWidth/6, largeBoxMargin + innerBoxHeight/6, circleDiameter, circleDiameter);
 }
