@@ -103,7 +103,7 @@ public void gameOverScreen() {
   } else if (winningPlayer == "O") {
     text("O Wins!", width/2, largeBoxMargin*2 + innerBoxHeight - 10); 
   } else {
-    text("Cats Game. Nobody Wins.", width/2, largeBoxMargin*2 + innerBoxHeight - 10); 
+    text("Cat's Game. Nobody Wins.", width/2, largeBoxMargin*2 + innerBoxHeight - 10); 
   }
 }
 
